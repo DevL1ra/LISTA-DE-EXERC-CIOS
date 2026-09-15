@@ -1,41 +1,39 @@
 <?php
-// Verifica se o formulário foi enviado via POST e se o vetor notas existe
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['notas'])) {
+// Verifica se o formulário foi enviado via POST e se os campos existem
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nomes'], $_POST['nota1'], $_POST['nota2'])) {
     
-    // Recebe o vetor enviado pelo formulário HTML
-    $notas = $_POST['notas'];
-    
-    $soma = 0;
-    $acimaDaMedia = 0;
-    $totalAlunos = count($notas);
+    $nomes = $_POST['nomes'];
+    $nota1 = $_POST['nota1'];
+    $nota2 = $_POST['nota2'];
 
-    // 1. Percorre o vetor enviado para calcular a soma
-    for ($i = 0; $i < $totalAlunos; $i++) {
-        // Converte cada posição do vetor para float (segurança de tipo)
-        $notas[$i] = (float) $notas[$i];
-        $soma += $notas[$i];
+    // Monta a matriz 3×3: [nome, nota1, nota2]
+    $turma = [];
+    for ($i = 0; $i < 3; $i++) {
+        $turma[$i][0] = $nomes[$i];
+        $turma[$i][1] = (float) $nota1[$i];
+        $turma[$i][2] = (float) $nota2[$i];
     }
 
-    // 2. Calcula a média geral da turma
-    $media = $soma / $totalAlunos;
+    // Exibe os resultados utilizando laços aninhados
+    echo "<h1>Tabela de Notas da Turma</h1>";
+    echo "<table border='1' cellpadding='8' cellspacing='0'>";
+    echo "<tr><th>Aluno</th><th>Nota 1</th><th>Nota 2</th><th>Média</th></tr>";
 
-    // 3. Percorre o vetor novamente para contar quantos alunos ficaram acima da média
-    for ($i = 0; $i < $totalAlunos; $i++) {
-        if ($notas[$i] > $media) {
-            $acimaDaMedia++;
+    for ($i = 0; $i < 3; $i++) {
+        echo "<tr>";
+        for ($j = 0; $j < 3; $j++) {
+            if ($j == 0) {
+                echo "<td>" . htmlspecialchars($turma[$i][$j]) . "</td>";
+            } else {
+                echo "<td>" . number_format($turma[$i][$j], 1, ',', '.') . "</td>";
+            }
         }
+        $media = ($turma[$i][1] + $turma[$i][2]) / 2;
+        echo "<td>" . number_format($media, 2, ',', '.') . "</td>";
+        echo "</tr>";
     }
 
-    // 4. Exibe os resultados organizados
-    echo "<h1>Resultado da Avaliação</h1>";
-    echo "<ul>";
-    for ($i = 0; $i < $totalAlunos; $i++) {
-        echo "<li>Aluno " . ($i + 1) . ": Nota " . number_format($notas[$i], 1, ',', '.') . "</li>";
-    }
-    echo "</ul>";
-
-    echo "<p><strong>Média geral da turma:</strong> " . number_format($media, 2, ',', '.') . "</p>";
-    echo "<p><strong>Quantidade de alunos acima da média:</strong> " . $acimaDaMedia . "</p>";
+    echo "</table>";
     echo "<br><a href='index.php'>Voltar ao formulário</a>";
 } else {
     // Redireciona para o formulário caso tente acessar diretamente a página de processamento

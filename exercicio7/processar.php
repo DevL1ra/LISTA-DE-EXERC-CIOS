@@ -2,40 +2,36 @@
 // Verifica se o formulário foi enviado via POST e se o vetor notas existe
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['notas'])) {
     
-    // Recebe o vetor enviado pelo formulário HTML
+    // Armazena as 4 notas em um array
     $notas = $_POST['notas'];
-    
-    $soma = 0;
-    $acimaDaMedia = 0;
-    $totalAlunos = count($notas);
+    $totalNotas = count($notas);
 
-    // 1. Percorre o vetor enviado para calcular a soma
-    for ($i = 0; $i < $totalAlunos; $i++) {
-        // Converte cada posição do vetor para float (segurança de tipo)
+    // Converte as notas para float
+    for ($i = 0; $i < $totalNotas; $i++) {
         $notas[$i] = (float) $notas[$i];
-        $soma += $notas[$i];
     }
 
-    // 2. Calcula a média geral da turma
-    $media = $soma / $totalAlunos;
+    // Calcula a média utilizando função de array
+    $media = array_sum($notas) / $totalNotas;
 
-    // 3. Percorre o vetor novamente para contar quantos alunos ficaram acima da média
-    for ($i = 0; $i < $totalAlunos; $i++) {
-        if ($notas[$i] > $media) {
-            $acimaDaMedia++;
-        }
+    // Define a situação do aluno
+    if ($media >= 7) {
+        $situacao = 'Aprovado';
+    } elseif ($media >= 5) {
+        $situacao = 'Recuperação';
+    } else {
+        $situacao = 'Reprovado';
     }
 
-    // 4. Exibe os resultados organizados
+    // Exibe os resultados organizados
     echo "<h1>Resultado da Avaliação</h1>";
     echo "<ul>";
-    for ($i = 0; $i < $totalAlunos; $i++) {
-        echo "<li>Aluno " . ($i + 1) . ": Nota " . number_format($notas[$i], 1, ',', '.') . "</li>";
+    for ($i = 0; $i < $totalNotas; $i++) {
+        echo "<li>Nota " . ($i + 1) . ": " . number_format($notas[$i], 1, ',', '.') . "</li>";
     }
     echo "</ul>";
-
-    echo "<p><strong>Média geral da turma:</strong> " . number_format($media, 2, ',', '.') . "</p>";
-    echo "<p><strong>Quantidade de alunos acima da média:</strong> " . $acimaDaMedia . "</p>";
+    echo "<p><strong>Média:</strong> " . number_format($media, 2, ',', '.') . "</p>";
+    echo "<p><strong>Situação:</strong> " . $situacao . "</p>";
     echo "<br><a href='index.php'>Voltar ao formulário</a>";
 } else {
     // Redireciona para o formulário caso tente acessar diretamente a página de processamento

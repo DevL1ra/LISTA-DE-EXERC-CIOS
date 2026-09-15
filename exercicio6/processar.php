@@ -1,41 +1,49 @@
 <?php
-// Verifica se o formulário foi enviado via POST e se o vetor notas existe
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['notas'])) {
+// Verifica se o formulário foi enviado via POST e se os vetores existem
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['idades'], $_POST['alturas'])) {
     
-    // Recebe o vetor enviado pelo formulário HTML
-    $notas = $_POST['notas'];
-    
-    $soma = 0;
-    $acimaDaMedia = 0;
-    $totalAlunos = count($notas);
+    // Recebe os vetores enviados pelo formulário
+    $idades = $_POST['idades'];
+    $alturas = $_POST['alturas'];
+    $total = count($idades);
 
-    // 1. Percorre o vetor enviado para calcular a soma
-    for ($i = 0; $i < $totalAlunos; $i++) {
-        // Converte cada posição do vetor para float (segurança de tipo)
-        $notas[$i] = (float) $notas[$i];
-        $soma += $notas[$i];
-    }
+    $maiorAltura = (float) $alturas[0];
+    $menorAltura = (float) $alturas[0];
+    $somaAlturasMaiores = 0;
+    $qtdMaiores = 0;
 
-    // 2. Calcula a média geral da turma
-    $media = $soma / $totalAlunos;
+    // Percorre o conjunto de 10 pessoas
+    for ($i = 0; $i < $total; $i++) {
+        $idade = (int) $idades[$i];
+        $altura = (float) $alturas[$i];
 
-    // 3. Percorre o vetor novamente para contar quantos alunos ficaram acima da média
-    for ($i = 0; $i < $totalAlunos; $i++) {
-        if ($notas[$i] > $media) {
-            $acimaDaMedia++;
+        if ($altura > $maiorAltura) {
+            $maiorAltura = $altura;
+        }
+        if ($altura < $menorAltura) {
+            $menorAltura = $altura;
+        }
+
+        // Soma alturas das pessoas com mais de 18 anos
+        if ($idade > 18) {
+            $somaAlturasMaiores += $altura;
+            $qtdMaiores++;
         }
     }
 
-    // 4. Exibe os resultados organizados
-    echo "<h1>Resultado da Avaliação</h1>";
-    echo "<ul>";
-    for ($i = 0; $i < $totalAlunos; $i++) {
-        echo "<li>Aluno " . ($i + 1) . ": Nota " . number_format($notas[$i], 1, ',', '.') . "</li>";
-    }
-    echo "</ul>";
+    // Exibe os resultados organizados
+    echo "<h1>Resultado das Estatísticas</h1>";
+    echo "<p><strong>Maior altura do grupo:</strong> " . number_format($maiorAltura, 2, ',', '.') . " m</p>";
+    echo "<p><strong>Menor altura do grupo:</strong> " . number_format($menorAltura, 2, ',', '.') . " m</p>";
 
-    echo "<p><strong>Média geral da turma:</strong> " . number_format($media, 2, ',', '.') . "</p>";
-    echo "<p><strong>Quantidade de alunos acima da média:</strong> " . $acimaDaMedia . "</p>";
+    if ($qtdMaiores > 0) {
+        $media = $somaAlturasMaiores / $qtdMaiores;
+        echo "<p><strong>Média de altura (maiores de 18 anos):</strong> " . number_format($media, 2, ',', '.') . " m</p>";
+        echo "<p><strong>Quantidade de pessoas com mais de 18 anos:</strong> " . $qtdMaiores . "</p>";
+    } else {
+        echo "<p><strong>Média de altura (maiores de 18 anos):</strong> nenhuma pessoa com mais de 18 anos informada.</p>";
+    }
+
     echo "<br><a href='index.php'>Voltar ao formulário</a>";
 } else {
     // Redireciona para o formulário caso tente acessar diretamente a página de processamento

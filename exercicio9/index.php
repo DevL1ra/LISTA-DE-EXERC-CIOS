@@ -2,20 +2,39 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Lançamento de Notas da Turma</title>
+    <title>Tabela de Notas de uma Turma</title>
 </head>
 <body>
-    <h2>Informe a nota dos 5 alunos</h2>
+    <h2>Tabela de Notas de uma Turma</h2>
+    <p>Informe o nome e as 2 notas de 3 alunos.</p>
     
     <form action="processar.php" method="POST">
-        <?php for ($i = 0; $i < 5; $i++): ?>
+        <?php for ($i = 0; $i < 3; $i++): ?>
             <div>
-                <label for="nota_<?= $i ?>">Nota do Aluno <?= $i + 1 ?>:</label>
-                <!-- O name "notas[]" envia os dados como um vetor numerado para o PHP -->
+                <strong>Aluno <?= $i + 1 ?>:</strong><br>
+                <label for="nome_<?= $i ?>">Nome:</label>
+                <input 
+                    type="text" 
+                    id="nome_<?= $i ?>" 
+                    name="nomes[]" 
+                    required
+                >
+                <br><br>
+                <label for="nota1_<?= $i ?>">Nota 1:</label>
                 <input 
                     type="number" 
-                    id="nota_<?= $i ?>" 
-                    name="notas[]" 
+                    id="nota1_<?= $i ?>" 
+                    name="nota1[]" 
+                    step="0.1" 
+                    min="0" 
+                    max="10" 
+                    required
+                >
+                <label for="nota2_<?= $i ?>">Nota 2:</label>
+                <input 
+                    type="number" 
+                    id="nota2_<?= $i ?>" 
+                    name="nota2[]" 
                     step="0.1" 
                     min="0" 
                     max="10" 
@@ -23,9 +42,10 @@
                 >
             </div>
             <br>
+            <hr>
         <?php endfor; ?>
         
-        <button type="submit">Calcular Média</button>
+        <button type="submit">Calcular Médias</button>
     </form>
 </body>
 </html>

@@ -2,30 +2,32 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Lançamento de Notas da Turma</title>
+    <title>Análise de Faturamento Diário</title>
 </head>
 <body>
-    <h2>Informe a nota dos 5 alunos</h2>
+    <h2>Análise de Faturamento Diário</h2>
+    <p>Informe o valor de vendas de cada dia da semana.</p>
     
     <form action="processar.php" method="POST">
-        <?php for ($i = 0; $i < 5; $i++): ?>
+        <?php
+        $dias = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
+        for ($i = 0; $i < 7; $i++):
+        ?>
             <div>
-                <label for="nota_<?= $i ?>">Nota do Aluno <?= $i + 1 ?>:</label>
-                <!-- O name "notas[]" envia os dados como um vetor numerado para o PHP -->
+                <label for="venda_<?= $i ?>"><?= $dias[$i] ?> (R$):</label>
                 <input 
                     type="number" 
-                    id="nota_<?= $i ?>" 
-                    name="notas[]" 
-                    step="0.1" 
+                    id="venda_<?= $i ?>" 
+                    name="vendas[]" 
+                    step="0.01" 
                     min="0" 
-                    max="10" 
                     required
                 >
             </div>
             <br>
         <?php endfor; ?>
         
-        <button type="submit">Calcular Média</button>
+        <button type="submit">Analisar Faturamento</button>
     </form>
 </body>
 </html>

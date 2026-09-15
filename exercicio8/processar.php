@@ -1,41 +1,48 @@
 <?php
-// Verifica se o formulário foi enviado via POST e se o vetor notas existe
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['notas'])) {
+// Verifica se o formulário foi enviado via POST e se o vetor vendas existe
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['vendas'])) {
     
-    // Recebe o vetor enviado pelo formulário HTML
-    $notas = $_POST['notas'];
-    
-    $soma = 0;
-    $acimaDaMedia = 0;
-    $totalAlunos = count($notas);
+    // Cria o vetor com os valores de vendas dos 7 dias
+    $dias = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
+    $vendas = $_POST['vendas'];
+    $totalDias = count($vendas);
 
-    // 1. Percorre o vetor enviado para calcular a soma
-    for ($i = 0; $i < $totalAlunos; $i++) {
-        // Converte cada posição do vetor para float (segurança de tipo)
-        $notas[$i] = (float) $notas[$i];
-        $soma += $notas[$i];
+    // Converte valores e calcula o total da semana
+    $total = 0;
+    for ($i = 0; $i < $totalDias; $i++) {
+        $vendas[$i] = (float) $vendas[$i];
+        $total += $vendas[$i];
     }
 
-    // 2. Calcula a média geral da turma
-    $media = $soma / $totalAlunos;
+    $media = $total / $totalDias;
 
-    // 3. Percorre o vetor novamente para contar quantos alunos ficaram acima da média
-    for ($i = 0; $i < $totalAlunos; $i++) {
-        if ($notas[$i] > $media) {
-            $acimaDaMedia++;
+    // Identifica o dia com maior faturamento e quantos dias ficaram acima da média
+    $maiorValor = $vendas[0];
+    $diaMaior = $dias[0];
+    $diasAcimaMedia = 0;
+
+    for ($i = 0; $i < $totalDias; $i++) {
+        if ($vendas[$i] > $maiorValor) {
+            $maiorValor = $vendas[$i];
+            $diaMaior = $dias[$i];
+        }
+        if ($vendas[$i] > $media) {
+            $diasAcimaMedia++;
         }
     }
 
-    // 4. Exibe os resultados organizados
-    echo "<h1>Resultado da Avaliação</h1>";
+    // Exibe os resultados organizados
+    echo "<h1>Análise de Faturamento</h1>";
     echo "<ul>";
-    for ($i = 0; $i < $totalAlunos; $i++) {
-        echo "<li>Aluno " . ($i + 1) . ": Nota " . number_format($notas[$i], 1, ',', '.') . "</li>";
+    for ($i = 0; $i < $totalDias; $i++) {
+        echo "<li>" . $dias[$i] . ": R$ " . number_format($vendas[$i], 2, ',', '.') . "</li>";
     }
     echo "</ul>";
-
-    echo "<p><strong>Média geral da turma:</strong> " . number_format($media, 2, ',', '.') . "</p>";
-    echo "<p><strong>Quantidade de alunos acima da média:</strong> " . $acimaDaMedia . "</p>";
+    echo "<p><strong>Valor total vendido na semana:</strong> R$ " . number_format($total, 2, ',', '.') . "</p>";
+    echo "<p><strong>Dia com maior faturamento:</strong> " . $diaMaior .
+         " (R$ " . number_format($maiorValor, 2, ',', '.') . ")</p>";
+    echo "<p><strong>Média semanal:</strong> R$ " . number_format($media, 2, ',', '.') . "</p>";
+    echo "<p><strong>Dias acima da média:</strong> " . $diasAcimaMedia . "</p>";
     echo "<br><a href='index.php'>Voltar ao formulário</a>";
 } else {
     // Redireciona para o formulário caso tente acessar diretamente a página de processamento

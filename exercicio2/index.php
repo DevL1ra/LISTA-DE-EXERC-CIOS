@@ -2,30 +2,31 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Lançamento de Notas da Turma</title>
+    <title>Classificação de Triângulos</title>
 </head>
 <body>
-    <h2>Informe a nota dos 5 alunos</h2>
+    <h2>Classificação de Triângulos</h2>
     
     <form action="processar.php" method="POST">
-        <?php for ($i = 0; $i < 5; $i++): ?>
-            <div>
-                <label for="nota_<?= $i ?>">Nota do Aluno <?= $i + 1 ?>:</label>
-                <!-- O name "notas[]" envia os dados como um vetor numerado para o PHP -->
-                <input 
-                    type="number" 
-                    id="nota_<?= $i ?>" 
-                    name="notas[]" 
-                    step="0.1" 
-                    min="0" 
-                    max="10" 
-                    required
-                >
-            </div>
-            <br>
-        <?php endfor; ?>
+        <div>
+            <label for="lado_a">Lado A:</label>
+            <input type="number" id="lado_a" name="lado_a" step="0.01" min="0.01" required>
+        </div>
+        <br>
         
-        <button type="submit">Calcular Média</button>
+        <div>
+            <label for="lado_b">Lado B:</label>
+            <input type="number" id="lado_b" name="lado_b" step="0.01" min="0.01" required>
+        </div>
+        <br>
+        
+        <div>
+            <label for="lado_c">Lado C:</label>
+            <input type="number" id="lado_c" name="lado_c" step="0.01" min="0.01" required>
+        </div>
+        <br>
+        
+        <button type="submit">Classificar Triângulo</button>
     </form>
 </body>
 </html>

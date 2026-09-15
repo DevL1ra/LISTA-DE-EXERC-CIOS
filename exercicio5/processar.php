@@ -1,42 +1,30 @@
 <?php
-// Verifica se o formulário foi enviado via POST e se o vetor notas existe
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['notas'])) {
+// Verifica se o formulário foi enviado via POST
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
-    // Recebe o vetor enviado pelo formulário HTML
-    $notas = $_POST['notas'];
-    
-    $soma = 0;
-    $acimaDaMedia = 0;
-    $totalAlunos = count($notas);
+    // Valores fixos da simulação
+    $saldo = 1000.00;
+    $taxa = 0.015; // 1,5% ao mês
+    $meses = 12;
 
-    // 1. Percorre o vetor enviado para calcular a soma
-    for ($i = 0; $i < $totalAlunos; $i++) {
-        // Converte cada posição do vetor para float (segurança de tipo)
-        $notas[$i] = (float) $notas[$i];
-        $soma += $notas[$i];
-    }
-
-    // 2. Calcula a média geral da turma
-    $media = $soma / $totalAlunos;
-
-    // 3. Percorre o vetor novamente para contar quantos alunos ficaram acima da média
-    for ($i = 0; $i < $totalAlunos; $i++) {
-        if ($notas[$i] > $media) {
-            $acimaDaMedia++;
-        }
-    }
-
-    // 4. Exibe os resultados organizados
-    echo "<h1>Resultado da Avaliação</h1>";
+    echo "<h1>Simulação de Juros Compostos</h1>";
+    echo "<p><strong>Investimento inicial:</strong> R$ " . number_format($saldo, 2, ',', '.') . "</p>";
+    echo "<p><strong>Taxa mensal:</strong> 1,5%</p>";
+    echo "<p><strong>Período:</strong> 12 meses</p>";
     echo "<ul>";
-    for ($i = 0; $i < $totalAlunos; $i++) {
-        echo "<li>Aluno " . ($i + 1) . ": Nota " . number_format($notas[$i], 1, ',', '.') . "</li>";
-    }
-    echo "</ul>";
 
-    echo "<p><strong>Média geral da turma:</strong> " . number_format($media, 2, ',', '.') . "</p>";
-    echo "<p><strong>Quantidade de alunos acima da média:</strong> " . $acimaDaMedia . "</p>";
-    echo "<br><a href='index.php'>Voltar ao formulário</a>";
+    // Laço de repetição para exibir o rendimento mês a mês
+    for ($mes = 1; $mes <= $meses; $mes++) {
+        $rendimento = $saldo * $taxa;
+        $saldo += $rendimento;
+
+        echo "<li>Mês " . $mes . ": rendimento de R$ " . number_format($rendimento, 2, ',', '.') .
+             " | saldo acumulado: R$ " . number_format($saldo, 2, ',', '.') . "</li>";
+    }
+
+    echo "</ul>";
+    echo "<p><strong>Saldo final acumulado:</strong> R$ " . number_format($saldo, 2, ',', '.') . "</p>";
+    echo "<br><a href='index.php'>Voltar</a>";
 } else {
     // Redireciona para o formulário caso tente acessar diretamente a página de processamento
     header("Location: index.php");

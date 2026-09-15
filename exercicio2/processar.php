@@ -1,41 +1,35 @@
 <?php
-// Verifica se o formulário foi enviado via POST e se o vetor notas existe
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['notas'])) {
+// Verifica se o formulário foi enviado via POST e se os campos existem
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['lado_a'], $_POST['lado_b'], $_POST['lado_c'])) {
     
-    // Recebe o vetor enviado pelo formulário HTML
-    $notas = $_POST['notas'];
-    
-    $soma = 0;
-    $acimaDaMedia = 0;
-    $totalAlunos = count($notas);
+    // Recebe e converte os lados do triângulo
+    $a = (float) $_POST['lado_a'];
+    $b = (float) $_POST['lado_b'];
+    $c = (float) $_POST['lado_c'];
 
-    // 1. Percorre o vetor enviado para calcular a soma
-    for ($i = 0; $i < $totalAlunos; $i++) {
-        // Converte cada posição do vetor para float (segurança de tipo)
-        $notas[$i] = (float) $notas[$i];
-        $soma += $notas[$i];
-    }
+    echo "<h1>Resultado da Classificação</h1>";
+    echo "<p><strong>Lados informados:</strong> A = " . number_format($a, 2, ',', '.') .
+         ", B = " . number_format($b, 2, ',', '.') .
+         ", C = " . number_format($c, 2, ',', '.') . "</p>";
 
-    // 2. Calcula a média geral da turma
-    $media = $soma / $totalAlunos;
-
-    // 3. Percorre o vetor novamente para contar quantos alunos ficaram acima da média
-    for ($i = 0; $i < $totalAlunos; $i++) {
-        if ($notas[$i] > $media) {
-            $acimaDaMedia++;
+    // Verifica se os lados formam um triângulo válido
+    if (($a + $b > $c) && ($a + $c > $b) && ($b + $c > $a)) {
+        // Classifica o triângulo
+        if ($a == $b && $b == $c) {
+            $tipo = 'Equilátero (três lados iguais)';
+        } elseif ($a == $b || $a == $c || $b == $c) {
+            $tipo = 'Isósceles (dois lados iguais)';
+        } else {
+            $tipo = 'Escaleno (três lados diferentes)';
         }
+
+        echo "<p><strong>Triângulo válido:</strong> Sim</p>";
+        echo "<p><strong>Classificação:</strong> " . $tipo . "</p>";
+    } else {
+        echo "<p><strong>Triângulo válido:</strong> Não</p>";
+        echo "<p>A soma de dois lados deve ser maior que o terceiro.</p>";
     }
 
-    // 4. Exibe os resultados organizados
-    echo "<h1>Resultado da Avaliação</h1>";
-    echo "<ul>";
-    for ($i = 0; $i < $totalAlunos; $i++) {
-        echo "<li>Aluno " . ($i + 1) . ": Nota " . number_format($notas[$i], 1, ',', '.') . "</li>";
-    }
-    echo "</ul>";
-
-    echo "<p><strong>Média geral da turma:</strong> " . number_format($media, 2, ',', '.') . "</p>";
-    echo "<p><strong>Quantidade de alunos acima da média:</strong> " . $acimaDaMedia . "</p>";
     echo "<br><a href='index.php'>Voltar ao formulário</a>";
 } else {
     // Redireciona para o formulário caso tente acessar diretamente a página de processamento

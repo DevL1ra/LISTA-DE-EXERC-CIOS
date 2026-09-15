@@ -2,30 +2,38 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Lançamento de Notas da Turma</title>
+    <title>Estatística de Alturas</title>
 </head>
 <body>
-    <h2>Informe a nota dos 5 alunos</h2>
+    <h2>Estatística de Alturas</h2>
+    <p>Informe a idade e a altura de 10 pessoas.</p>
     
     <form action="processar.php" method="POST">
-        <?php for ($i = 0; $i < 5; $i++): ?>
+        <?php for ($i = 0; $i < 10; $i++): ?>
             <div>
-                <label for="nota_<?= $i ?>">Nota do Aluno <?= $i + 1 ?>:</label>
-                <!-- O name "notas[]" envia os dados como um vetor numerado para o PHP -->
+                <strong>Pessoa <?= $i + 1 ?>:</strong>
+                <label for="idade_<?= $i ?>">Idade:</label>
                 <input 
                     type="number" 
-                    id="nota_<?= $i ?>" 
-                    name="notas[]" 
-                    step="0.1" 
-                    min="0" 
-                    max="10" 
+                    id="idade_<?= $i ?>" 
+                    name="idades[]" 
+                    min="1" 
+                    required
+                >
+                <label for="altura_<?= $i ?>">Altura (m):</label>
+                <input 
+                    type="number" 
+                    id="altura_<?= $i ?>" 
+                    name="alturas[]" 
+                    step="0.01" 
+                    min="0.01" 
                     required
                 >
             </div>
             <br>
         <?php endfor; ?>
         
-        <button type="submit">Calcular Média</button>
+        <button type="submit">Calcular Estatísticas</button>
     </form>
 </body>
 </html>

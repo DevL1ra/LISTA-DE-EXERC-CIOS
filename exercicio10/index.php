@@ -2,30 +2,14 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Lançamento de Notas da Turma</title>
+    <title>Soma da Diagonal Principal</title>
 </head>
 <body>
-    <h2>Informe a nota dos 5 alunos</h2>
+    <h2>Soma dos Elementos da Diagonal Principal</h2>
+    <p>Será gerada uma matriz 3×3 com números inteiros aleatórios.</p>
     
     <form action="processar.php" method="POST">
-        <?php for ($i = 0; $i < 5; $i++): ?>
-            <div>
-                <label for="nota_<?= $i ?>">Nota do Aluno <?= $i + 1 ?>:</label>
-                <!-- O name "notas[]" envia os dados como um vetor numerado para o PHP -->
-                <input 
-                    type="number" 
-                    id="nota_<?= $i ?>" 
-                    name="notas[]" 
-                    step="0.1" 
-                    min="0" 
-                    max="10" 
-                    required
-                >
-            </div>
-            <br>
-        <?php endfor; ?>
-        
-        <button type="submit">Calcular Média</button>
+        <button type="submit">Gerar Matriz e Calcular</button>
     </form>
 </body>
 </html>
